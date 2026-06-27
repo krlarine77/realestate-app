@@ -97,6 +97,11 @@ git push origin <現在のブランチ名>
 - エラーハンドリングはシステム境界（API 呼び出し、ユーザー入力）のみ。
 - 未使用のコードは削除する（後方互換シムは書かない）。
 
+## デプロイ情報
+
+- 本番URL：https://realestate-app-git-main-lari3.vercel.app
+- Supabaseプロジェクト名：realestate-app
+
 ## セキュリティ
 
 - API キー・シークレットは `.env` ファイルで管理し、絶対にコミットしない。
