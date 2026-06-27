@@ -7,18 +7,21 @@ export default function ProtectedRoute({ children }) {
   const [session, setSession] = useState(undefined)
 
   useEffect(() => {
-    // 初回マウント時にセッション取得
+    // 初回マウント時にセッション取得（デバッグ用ログあり）
     supabase.auth.getSession()
       .then(({ data: { session } }) => {
+        console.log('[ProtectedRoute] session:', session)
+        console.log('[ProtectedRoute] user email:', session?.user?.email)
         setSession(session)
       })
-      .catch(() => {
-        // セッション取得に失敗した場合は未ログイン扱い
+      .catch((err) => {
+        console.error('[ProtectedRoute] getSession error:', err)
         setSession(null)
       })
 
     // ログイン・ログアウト時にセッション状態を同期
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log('[ProtectedRoute] onAuthStateChange session:', session)
       setSession(session)
     })
 
@@ -29,8 +32,8 @@ export default function ProtectedRoute({ children }) {
   if (session === undefined) return null
 
   // メールアドレスで認証済みのユーザーのみ通過させる
-  // （匿名セッションや未認証セッションはログイン画面へ）
   const isAuthenticated = session?.user?.email != null
+  console.log('[ProtectedRoute] isAuthenticated:', isAuthenticated)
 
   if (!isAuthenticated) return <Navigate to="/login" replace />
 
